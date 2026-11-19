@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Build an AR.js pattern marker (printable .png + trained .patt) from an image.
 
-This mirrors the AR.js marker training tool
+This follows the same layout and encoding as the AR.js marker training tool
 (https://jeromeetienne.github.io/AR.js/three.js/examples/marker-training/examples/generator.html)
-so markers can be regenerated reproducibly from the command line.
+so markers can be regenerated reproducibly from the command line. The --ratio
+must match patternRatio in the arjs attribute in play.html (0.75).
 
 Usage:
     python tools/make_marker.py <source-image> <output-basename> [--ratio 0.75]
@@ -12,7 +13,7 @@ Example:
     python tools/make_marker.py images/westerhout/2.png markers/westerhout
 
 Writes <output-basename>.png (print or display this) and <output-basename>.patt
-(loaded by the game). Requires Pillow: pip install Pillow
+(loaded by the game). Requires Python 3.10+ and Pillow: pip install Pillow
 """
 
 import argparse
@@ -73,10 +74,16 @@ def main() -> None:
     parser.add_argument("source", type=Path, help="image to place inside the marker")
     parser.add_argument("output", type=Path, help="output path without extension")
     parser.add_argument("--ratio", type=float, default=0.75,
-                        help="pattern ratio used by the existing markers (default: 0.75)")
+                        help="must match patternRatio in play.html (default: 0.75)")
     args = parser.parse_args()
+    if not 0 < args.ratio < 1:
+        parser.error("--ratio must be between 0 and 1")
+    try:
+        source = Image.open(args.source)
+    except OSError as err:  # missing file or not an image
+        parser.error(f"cannot read image {args.source}: {err}")
 
-    marker = build_marker(Image.open(args.source), args.ratio)
+    marker = build_marker(source, args.ratio)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     marker.save(args.output.with_suffix(".png"))
     args.output.with_suffix(".patt").write_text(
