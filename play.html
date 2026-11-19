@@ -18,12 +18,14 @@
           integrity="sha384-cb50shLQXphYaIrXbeCNT0YBudBjWNG3WaM75I/S9M3ImMqc4mzGCPHiMKW4PvSI"
           crossorigin="anonymous"></script>
   <script src="js/families.js"></script>
+  <script src="js/progress.js"></script>
   <script src="js/sync-projection-inverse.js"></script>
   <script src="js/text-hit-area.js"></script>
   <script src="js/quiz.js"></script>
 </head>
 <body class="ar-page">
   <a class="back-link" href="./">&larr; All families</a>
+  <output class="ar-hint" id="ar-hint">Starting camera&hellip;</output>
 
   <!--
     Scene markup. play.js clones it, sets the marker and family, then attaches it
@@ -36,16 +38,21 @@
       <a-entity cursor="rayOrigin: mouse" raycaster="objects: .clickable"></a-entity>
 
       <a-marker-camera preset="custom" type="pattern">
-        <a-entity data-role="quiz" position="0 0 2" scale="0.5 0.5 0.5">
+        <a-entity data-role="quiz" position="0 0 2" scale="0.5 0.5 0.5"
+                  animation__appear="property: scale; from: 0.05 0.05 0.05; to: 0.5 0.5 0.5; dur: 450; easing: easeOutBack; startEvents: quiz-marker-found">
           <a-text data-role="header" position="0 1 -4.5" rotation="-90 0 0" align="center"></a-text>
           <a-text data-role="question" position="0 1 -4.6" rotation="-90 0 0" align="center"></a-text>
           <a-image data-role="image" position="0 1 -3.7" rotation="-90 0 0" width="0.7" height="0.8"
                    transparent="true" alpha-test="0.2" shader="standard"></a-image>
 
-          <a-text data-role="choice" data-button rotation="-90 0 0" text-hit-area></a-text>
-          <a-text data-role="choice" data-button rotation="-90 0 0" text-hit-area></a-text>
-          <a-text data-role="choice" data-button rotation="-90 0 0" text-hit-area></a-text>
-          <a-text data-role="choice" data-button rotation="-90 0 0" text-hit-area></a-text>
+          <a-text data-role="choice" data-button rotation="-90 0 0" anchor="right" align="right" text-hit-area
+                  animation__pop="property: scale; from: 1.25 1.25 1.25; to: 1 1 1; dur: 300; easing: easeOutQuad; startEvents: pop"></a-text>
+          <a-text data-role="choice" data-button rotation="-90 0 0" anchor="left" text-hit-area
+                  animation__pop="property: scale; from: 1.25 1.25 1.25; to: 1 1 1; dur: 300; easing: easeOutQuad; startEvents: pop"></a-text>
+          <a-text data-role="choice" data-button rotation="-90 0 0" anchor="right" align="right" text-hit-area
+                  animation__pop="property: scale; from: 1.25 1.25 1.25; to: 1 1 1; dur: 300; easing: easeOutQuad; startEvents: pop"></a-text>
+          <a-text data-role="choice" data-button rotation="-90 0 0" anchor="left" text-hit-area
+                  animation__pop="property: scale; from: 1.25 1.25 1.25; to: 1 1 1; dur: 300; easing: easeOutQuad; startEvents: pop"></a-text>
 
           <a-text data-role="score" rotation="-90 0 0" align="center"></a-text>
           <a-text data-role="scores" data-button value="High Score" rotation="-90 0 0" color="green" text-hit-area></a-text>

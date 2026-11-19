@@ -27,6 +27,7 @@
 
     <section aria-labelledby="families">
       <h2 id="families">Families</h2>
+      <p class="progress" id="progress"></p>
       <ul class="family-list" id="family-list"></ul>
       <noscript><p>This game needs JavaScript enabled.</p></noscript>
     </section>
@@ -37,6 +38,7 @@
       <img class="marker" alt="" width="96" height="96" loading="lazy">
       <div class="family-info">
         <h3 class="family-name"></h3>
+        <p class="badge" hidden></p>
         <div class="actions">
           <a class="button primary play-link">Play</a>
           <a class="button marker-link" target="_blank" rel="noopener">Marker</a>
@@ -46,6 +48,7 @@
   </template>
 
   <script src="js/families.js"></script>
+  <script src="js/progress.js"></script>
   <script src="js/home.js"></script>
 </body>
 </html>
