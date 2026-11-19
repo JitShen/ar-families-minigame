@@ -7,23 +7,28 @@ so markers can be regenerated reproducibly from the command line. The --ratio
 must match patternRatio in the arjs attribute in play.html (0.75).
 
 Usage:
-    python tools/make_marker.py <source-image> <output-basename> [--ratio 0.75]
+    python tools/make_marker.py <source-image> <output-basename> [--ratio 0.75] [--qr URL] [--autocontrast]
 
 Example:
-    python tools/make_marker.py images/westerhout/2.png markers/westerhout
+    python tools/make_marker.py images/westerhout/2.png markers/westerhout \
+        --qr "https://jitshen.github.io/AR-Families-Minigame/play.html?family=westerhout"
 
 Writes <output-basename>.png (print or display this) and <output-basename>.patt
-(loaded by the game). Requires Python 3.10+ and Pillow: pip install Pillow
+(loaded by the game). --qr adds a QR code below the marker, outside the black
+border, so it does not affect detection.
+Requires Python 3.10+ and Pillow (pip install Pillow); --qr also needs segno (pip install segno).
 """
 
 import argparse
+import io
 from pathlib import Path
 
-from PIL import Image
+from PIL import Image, ImageOps
 
 MARKER_SIZE = 512
 WHITE_MARGIN = 0.1  # quiet zone around the black border, as a fraction of the size
 PATTERN_SIZE = 16   # AR.js samples the inner image at 16x16 per orientation
+QR_SIZE = 180       # approximate QR width in pixels, below the marker
 
 
 def build_marker(source: Image.Image, ratio: float) -> Image.Image:
@@ -54,6 +59,22 @@ def inner_image(marker: Image.Image, ratio: float) -> Image.Image:
                         round(w * (1 - margin)), round(h * (1 - margin))))
 
 
+def add_qr(marker: Image.Image, url: str) -> Image.Image:
+    """Return the marker with a QR code for url centred underneath it."""
+    import segno  # only needed for --qr
+
+    buffer = io.BytesIO()
+    segno.make(url, error="m").save(buffer, kind="png", scale=1, border=2)
+    qr = Image.open(buffer).convert("RGB")
+    scale = max(1, QR_SIZE // qr.width)  # whole pixels per module keep it scannable
+    qr = qr.resize((qr.width * scale, qr.height * scale), Image.NEAREST)
+
+    card = Image.new("RGB", (MARKER_SIZE, MARKER_SIZE + qr.height), "white")
+    card.paste(marker, (0, 0))
+    card.paste(qr, ((MARKER_SIZE - qr.width) // 2, MARKER_SIZE))
+    return card
+
+
 def encode_pattern(inner: Image.Image) -> str:
     """Encode the inner image as an ARToolKit .patt: 4 rotations x BGR x 16x16."""
     small = inner.convert("RGB").resize((PATTERN_SIZE, PATTERN_SIZE), Image.NEAREST)
@@ -75,6 +96,9 @@ def main() -> None:
     parser.add_argument("output", type=Path, help="output path without extension")
     parser.add_argument("--ratio", type=float, default=0.75,
                         help="must match patternRatio in play.html (default: 0.75)")
+    parser.add_argument("--qr", metavar="URL", help="add a QR code linking to URL below the marker")
+    parser.add_argument("--autocontrast", action="store_true",
+                        help="greyscale + stretch contrast; use for pale art the camera struggles to track")
     args = parser.parse_args()
     if not 0 < args.ratio < 1:
         parser.error("--ratio must be between 0 and 1")
@@ -82,12 +106,17 @@ def main() -> None:
         source = Image.open(args.source)
     except OSError as err:  # missing file or not an image
         parser.error(f"cannot read image {args.source}: {err}")
+    if args.autocontrast:
+        source = ImageOps.autocontrast(ImageOps.grayscale(source.convert("RGB")), cutoff=5)
 
     marker = build_marker(source, args.ratio)
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    marker.save(args.output.with_suffix(".png"))
+    # Train the pattern on the marker alone, before any QR is added below it.
     args.output.with_suffix(".patt").write_text(
         encode_pattern(inner_image(marker, args.ratio)), newline="\n")
+    if args.qr:
+        marker = add_qr(marker, args.qr)
+    marker.save(args.output.with_suffix(".png"))
     print(f"Wrote {args.output.with_suffix('.png')} and {args.output.with_suffix('.patt')}")
 
 
