@@ -1,7 +1,7 @@
 # AR Families Minigame
 
 Augmented reality quizzes about the Dutch families who settled in Melaka over the centuries.
-Point a phone at a family's marker and a three-question quiz appears on top of it.
+Point a phone at a family's marker and a three-question quiz appears on top of it, with a 3D object from the family's story.
 
 Families: DeWitt, Fredericks, Klass, Minjoot, Skelchy and Westerhout.
 
@@ -10,7 +10,7 @@ Families: DeWitt, Fredericks, Klass, Minjoot, Skelchy and Westerhout.
 ## How to play
 
 1. Open a family's marker on a second screen, or print it (the **Marker** button on the home page, or the files in [`markers/`](markers/)).
-2. On your phone, open the site, tap **Play** and allow camera access.
+2. On your phone, scan the QR code under the marker (or open the site and tap **Play**), then allow camera access.
 3. Point the camera at the marker and tap the answers. Green is correct, red is wrong, and a short fact follows each answer.
 
 Answers are shuffled every round. Your best score per family is saved in the browser, and the home page shows a badge for each family you have completed. Complete all six to become a Family Historian.
@@ -38,9 +38,11 @@ js/play.js                 Builds the AR scene for the requested family
 js/home.js                 Renders the family list on the home page
 js/text-hit-area.js        Makes whole text labels tappable, not just the letters
 js/sync-projection-inverse.js  Fixes tap positions with AR.js camera projection
+js/fit-size.js             Scales each family's 3D object to the same size
 css/style.css              Styles for both pages
 images/<id>/               Pictures shown with the questions
-markers/<id>.png|.patt     Printable marker and its trained AR.js pattern
+markers/<id>.png|.patt     Printable marker (with QR code) and its trained AR.js pattern
+models/                    3D objects shown on the markers (.glb)
 tools/make_marker.py       Generates a marker (.png + .patt) from any image
 ```
 
@@ -53,17 +55,24 @@ Built with [A-Frame](https://aframe.io/) 1.4.2 and [AR.js](https://github.com/AR
 3. Create its marker:
 
    ```bash
-   pip install Pillow
-   python tools/make_marker.py path/to/artwork.png markers/<id>
+   pip install Pillow segno
+   python tools/make_marker.py images/<id>/1.png markers/<id>        --qr "https://jitshen.github.io/AR-Families-Minigame/play.html?family=<id>"
    ```
 
-   Use high-contrast artwork that looks different from the other markers and isn't symmetrical, so the camera can tell which way up it is.
+   Use high-contrast artwork that looks different from the other markers and isn't symmetrical, so the camera can tell which way up it is. Add `--autocontrast` for pale artwork (the DeWitt marker uses it).
+4. Optionally add a `model` (a `.glb` in `models/`, or simple shapes) to show a 3D object on the marker.
 
 The home page and the AR page both pick up the new family automatically.
 
 ## Known limitations
 
-- The DeWitt, Fredericks, Klass, Minjoot and Skelchy markers share a similar flower-and-QR layout, so one family's page can sometimes react to another family's marker. Regenerating them with distinct artwork would fix this, but printed copies would need replacing.
-- The QR codes printed inside those markers link to separate project sites, not to this game.
-- The Westerhout marker was regenerated in 2026 (the original pattern file was lost), so older printed Westerhout markers will not work.
-- The DeWitt pattern file was retrained from `markers/dewitt.png`, because the original file did not match that image. Print the marker from this repo.
+- The markers were redesigned in 2026, so markers printed before then no longer work. Print them again from `markers/`.
+- The DeWitt sewing machine and the Klass cake stand are built from simple shapes, because no public-domain models exist.
+
+## Credits
+
+3D models, all public domain (CC0), from [Poly Pizza](https://poly.pizza):
+
+- Sail Ship and Tree by [Quaternius](https://quaternius.com)
+- Cake by [Kenney](https://kenney.nl)
+- Boots (used as clogs) by Isa Lousberg
