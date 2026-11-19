@@ -11,9 +11,9 @@ Families: DeWitt, Fredericks, Klass, Minjoot, Skelchy and Westerhout.
 
 1. Open a family's marker on a second screen, or print it (the **Marker** button on the home page, or the files in [`markers/`](markers/)).
 2. On your phone, open the site, tap **Play** and allow camera access.
-3. Point the camera at the marker and tap the answers. Green is correct, red is wrong.
+3. Point the camera at the marker and tap the answers. Green is correct, red is wrong, and a short fact follows each answer.
 
-Your best score per family is saved in the browser.
+Answers are shuffled every round. Your best score per family is saved in the browser, and the home page shows a badge for each family you have completed. Complete all six to become a Family Historian.
 
 ## Run locally
 
@@ -32,7 +32,8 @@ To test on a phone, serve it over HTTPS (for example with GitHub Pages, or a tun
 index.html                 Home page: list of families and their markers
 play.html                  AR page, opened as play.html?family=<id>
 js/families.js             All quiz content (questions, answers, images, layout)
-js/quiz.js                 family-quiz A-Frame component (game flow and scoring)
+js/quiz.js                 family-quiz A-Frame component (game flow, scoring, sound)
+js/progress.js             Best score per family, saved in localStorage
 js/play.js                 Builds the AR scene for the requested family
 js/home.js                 Renders the family list on the home page
 js/text-hit-area.js        Makes whole text labels tappable, not just the letters
@@ -47,7 +48,7 @@ Built with [A-Frame](https://aframe.io/) 1.4.2 and [AR.js](https://github.com/AR
 
 ## Adding a family
 
-1. Add an entry to `js/families.js`. The comment at the top explains each field.
+1. Add an entry to `js/families.js`. The comment at the top explains each field, including the optional `fact` shown after each answer.
 2. Put its pictures in `images/<id>/`.
 3. Create its marker:
 
