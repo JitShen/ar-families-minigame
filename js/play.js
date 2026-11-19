@@ -34,5 +34,19 @@
   const scene = document.importNode(document.getElementById('scene-template').content, true);
   scene.querySelector('a-marker-camera').setAttribute('url', `markers/${family.id}.patt`);
   scene.querySelector('[data-role="quiz"]').setAttribute('family-quiz', `family: ${family.id}`);
+
+  // The family's 3D object: a .glb model, or a list of A-Frame primitives.
+  const model = scene.querySelector('[data-role="model-content"]');
+  if (family.model && family.model.src) {
+    model.setAttribute('gltf-model', family.model.src);
+  } else if (family.model && family.model.shapes) {
+    family.model.shapes.forEach((shape) => {
+      const part = document.createElement('a-entity');
+      Object.entries(shape).forEach(([name, value]) => part.setAttribute(name, value));
+      model.appendChild(part);
+    });
+  } else {
+    scene.querySelector('[data-role="model"]').remove();
+  }
   document.body.appendChild(scene);
 })();

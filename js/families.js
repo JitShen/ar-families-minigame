@@ -9,6 +9,9 @@
  *   id             Used in the URL (play.html?family=<id>) and for images/<id>/, markers/<id>.patt.
  *   name           Shown as "<name> Family".
  *   questionWidth  A-Frame text width for the question text.
+ *   model          Optional 3D object shown on the marker: { src: 'models/x.glb' }, or
+ *                  { shapes: [...] } where each shape is a set of A-Frame attributes.
+ *                  Any size works; it is scaled to fit.
  *   questions      The quiz, in order.
  *
  * Question fields:
@@ -26,6 +29,18 @@ window.FAMILIES = [
     id: 'dewitt',
     name: 'DeWitt',
     questionWidth: 3.3,
+    // Singer-style sewing machine (simple shapes: no CC0 model exists)
+    model: {
+      shapes: [
+        { geometry: 'primitive: box; width: 1.2; height: 0.08; depth: 0.55', material: 'color: #6b4423', position: '0 0.04 0' },
+        { geometry: 'primitive: box; width: 1; height: 0.08; depth: 0.45', material: 'color: #161616', position: '0 0.12 0' },
+        { geometry: 'primitive: box; width: 0.18; height: 0.5; depth: 0.3', material: 'color: #161616', position: '0.38 0.41 0' },
+        { geometry: 'primitive: box; width: 0.95; height: 0.16; depth: 0.26', material: 'color: #161616', position: '0.02 0.66 0' },
+        { geometry: 'primitive: box; width: 0.16; height: 0.32; depth: 0.26', material: 'color: #161616', position: '-0.42 0.5 0' },
+        { geometry: 'primitive: cylinder; radius: 0.012; height: 0.2', material: 'color: #d0d0d0', position: '-0.42 0.25 0' },
+        { geometry: 'primitive: cylinder; radius: 0.2; height: 0.06', material: 'color: #b8902f', position: '0.5 0.62 0', rotation: '0 0 90' }
+      ]
+    },
     questions: [
       {
         text: 'Where did Willem Adriaan de Wit come from before landing in Malacca?',
@@ -62,6 +77,7 @@ window.FAMILIES = [
     id: 'fredericks',
     name: 'Fredericks',
     questionWidth: 4,
+    model: { src: 'models/tree.glb' },
     questions: [
       {
         text: 'Who is this in the picture?',
@@ -98,6 +114,18 @@ window.FAMILIES = [
     id: 'klass',
     name: 'Klass',
     questionWidth: 3.3,
+    // Three-tier cake stand (simple shapes: no CC0 model exists)
+    model: {
+      shapes: [
+        { geometry: 'primitive: cylinder; radius: 0.02; height: 1', material: 'color: #c9c9c9', position: '0 0.5 0' },
+        { geometry: 'primitive: cylinder; radius: 0.45; height: 0.03', material: 'color: #f4f1ea', position: '0 0.05 0' },
+        { geometry: 'primitive: cylinder; radius: 0.33; height: 0.03', material: 'color: #f4f1ea', position: '0 0.4 0' },
+        { geometry: 'primitive: cylinder; radius: 0.22; height: 0.03', material: 'color: #f4f1ea', position: '0 0.75 0' },
+        { geometry: 'primitive: cylinder; radius: 0.3; height: 0.1', material: 'color: #f3b7c4', position: '0 0.115 0' },
+        { geometry: 'primitive: cylinder; radius: 0.2; height: 0.1', material: 'color: #f3b7c4', position: '0 0.465 0' },
+        { geometry: 'primitive: cylinder; radius: 0.12; height: 0.1', material: 'color: #f3b7c4', position: '0 0.815 0' }
+      ]
+    },
     questions: [
       {
         text: 'The Klass Family Tradition is to capture a complete Family Photograph. After every _____ years, it was customary for a family photograph to be taken.',
@@ -135,6 +163,7 @@ window.FAMILIES = [
     id: 'minjoot',
     name: 'Minjoot',
     questionWidth: 4,
+    model: { src: 'models/clogs.glb' },
     questions: [
       {
         text: 'Who were the earliest Forebears of the Minjoot Family?',
@@ -165,6 +194,7 @@ window.FAMILIES = [
     id: 'skelchy',
     name: 'Skelchy',
     questionWidth: 4,
+    model: { src: 'models/cake.glb' },
     questions: [
       {
         text: 'Who inspired Nigel’s love for baking?',
@@ -195,6 +225,7 @@ window.FAMILIES = [
     id: 'westerhout',
     name: 'Westerhout',
     questionWidth: 4,
+    model: { src: 'models/ship.glb' },
     questions: [
       {
         text: 'Where are the Roots of The Westerhout Family?',

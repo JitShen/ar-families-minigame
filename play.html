@@ -21,6 +21,7 @@
   <script src="js/progress.js"></script>
   <script src="js/sync-projection-inverse.js"></script>
   <script src="js/text-hit-area.js"></script>
+  <script src="js/fit-size.js"></script>
   <script src="js/quiz.js"></script>
 </head>
 <body class="ar-page">
@@ -62,6 +63,14 @@
           <!-- Translucent backdrop behind the text -->
           <a-plane position="0 0.25 -4" rotation="-90 0 0" width="4.8" height="2.2"
                    color="black" material="transparent: true; opacity: 0.7"></a-plane>
+
+          <!-- The family's 3D object just above the panel, leaned back so a camera looking
+               down at the marker sees its front; it spins on its own axis. play.js fills it in. -->
+          <a-entity data-role="model" position="0 0 -5.45" rotation="-50 0 0">
+            <a-entity animation="property: rotation; to: 0 360 0; dur: 16000; loop: true; easing: linear">
+              <a-entity data-role="model-content" fit-size="0.9"></a-entity>
+            </a-entity>
+          </a-entity>
         </a-entity>
       </a-marker-camera>
     </a-scene>
