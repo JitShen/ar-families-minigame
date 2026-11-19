@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AR Families Minigame</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="css/style.css">
+
+  <!--
+    Pinned versions with Subresource Integrity. AR.js 3.4.5 is built for A-Frame ^1.3.
+    (A-Frame 0.9.x no longer starts in current browsers: it calls a removed WebXR API.)
+  -->
+  <script src="https://cdn.jsdelivr.net/npm/aframe@1.4.2/dist/aframe-v1.4.2.min.js"
+          integrity="sha384-25pIkGR/YGJC9990evIhuJOF93YstSrYyrn1lEQLTpwhFtBDaUYfjQhGDfY9K/6f"
+          crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@ar-js-org/ar.js@3.4.5/aframe/build/aframe-ar.js"
+          integrity="sha384-cb50shLQXphYaIrXbeCNT0YBudBjWNG3WaM75I/S9M3ImMqc4mzGCPHiMKW4PvSI"
+          crossorigin="anonymous"></script>
+  <script src="js/families.js"></script>
+  <script src="js/sync-projection-inverse.js"></script>
+  <script src="js/text-hit-area.js"></script>
+  <script src="js/quiz.js"></script>
+</head>
+<body class="ar-page">
+  <a class="back-link" href="./">&larr; All families</a>
+
+  <!--
+    Scene markup. play.js clones it, sets the marker and family, then attaches it
+    (AR.js reads the marker URL only once, when the scene starts).
+    Every text lies flat on the marker (rotation -90 0 0).
+  -->
+  <template id="scene-template">
+    <a-scene embedded vr-mode-ui="enabled: false" sync-projection-inverse
+             arjs="debugUIEnabled: false; sourceType: webcam; patternRatio: 0.75">
+      <a-entity cursor="rayOrigin: mouse" raycaster="objects: .clickable"></a-entity>
+
+      <a-marker-camera preset="custom" type="pattern">
+        <a-entity data-role="quiz" position="0 0 2" scale="0.5 0.5 0.5">
+          <a-text data-role="header" position="0 1 -4.5" rotation="-90 0 0" align="center"></a-text>
+          <a-text data-role="question" position="0 1 -4.6" rotation="-90 0 0" align="center"></a-text>
+          <a-image data-role="image" position="0 1 -3.7" rotation="-90 0 0" width="0.7" height="0.8"
+                   transparent="true" alpha-test="0.2" shader="standard"></a-image>
+
+          <a-text data-role="choice" data-button rotation="-90 0 0" text-hit-area></a-text>
+          <a-text data-role="choice" data-button rotation="-90 0 0" text-hit-area></a-text>
+          <a-text data-role="choice" data-button rotation="-90 0 0" text-hit-area></a-text>
+          <a-text data-role="choice" data-button rotation="-90 0 0" text-hit-area></a-text>
+
+          <a-text data-role="score" rotation="-90 0 0" align="center"></a-text>
+          <a-text data-role="scores" data-button value="High Score" rotation="-90 0 0" color="green" text-hit-area></a-text>
+          <a-text data-role="play" data-button value="Play Game" rotation="-90 0 0" color="red" text-hit-area></a-text>
+          <a-text data-role="menu" data-button value="Main Menu" rotation="-90 0 0" color="green" text-hit-area></a-text>
+
+          <!-- Translucent backdrop behind the text -->
+          <a-plane position="0 0.25 -4" rotation="-90 0 0" width="4.8" height="2.2"
+                   color="black" material="transparent: true; opacity: 0.7"></a-plane>
+        </a-entity>
+      </a-marker-camera>
+    </a-scene>
+  </template>
+
+  <script src="js/play.js"></script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Augmented reality quizzes about Dutch families who settled in Melaka.">
+  <title>AR Families Minigame</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="home">
+  <main class="container">
+    <header class="intro">
+      <h1>AR Families Minigame</h1>
+      <p>Augmented reality quizzes about the Dutch families who settled in Melaka over the centuries.</p>
+    </header>
+
+    <section aria-labelledby="how-to-play">
+      <h2 id="how-to-play">How to play</h2>
+      <ol class="steps">
+        <li>Open the family's marker on another screen, or print it.</li>
+        <li>On your phone, tap <strong>Play</strong> and allow camera access.</li>
+        <li>Point the camera at the marker. The quiz appears on top of it.</li>
+        <li>Tap an answer. Green is correct, red is wrong.</li>
+      </ol>
+    </section>
+
+    <section aria-labelledby="families">
+      <h2 id="families">Families</h2>
+      <ul class="family-list" id="family-list"></ul>
+      <noscript><p>This game needs JavaScript enabled.</p></noscript>
+    </section>
+  </main>
+
+  <template id="family-card">
+    <li class="family-card">
+      <img class="marker" alt="" width="96" height="96" loading="lazy">
+      <div class="family-info">
+        <h3 class="family-name"></h3>
+        <div class="actions">
+          <a class="button primary play-link">Play</a>
+          <a class="button marker-link" target="_blank" rel="noopener">Marker</a>
+        </div>
+      </div>
+    </li>
+  </template>
+
+  <script src="js/families.js"></script>
+  <script src="js/home.js"></script>
+</body>
+</html>
